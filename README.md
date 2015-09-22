@@ -1,5 +1,5 @@
 # nexus-upload
-Upload any artefact to Nexus.
+Upload any artefact to [Nexus](http://www.sonatype.org/nexus/).
 
 
 # How to install ?
