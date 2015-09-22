@@ -1,0 +1,57 @@
+#!/bin/bash
+# Distributed under the MIT license
+# Copyright (c) 2015 Nicolae Ghimbovschi
+
+function version() {
+	echo "1.0.0"
+}
+
+function usage() {
+
+printf "
+export NEXUS_URL="http://localhost:8081"
+export NEXUS_USER="admin"
+export NEXUS_PASSWORD="admin123"
+export REPOSITORY_ID="artefacts"
+export GROUP_ID="com.group"
+export PROJECT_NAME="my-ios-project"
+export VERSION="1.1.1"
+$0 /path/to/artefact.file
+"
+}
+
+function upload() {
+	ARTEFACT_PATH=$(echo "$0")
+	ARTEFACT_NAME=$(basename "${ARTEFACT_PATH}")
+	ARTEFACT_EXTENSION="${ARTEFACT_NAME##*.}"
+
+	curl -v -F r="${REPOSITORY_ID}"\
+		    -F hasPom=false\
+		    -F e="${ARTEFACT_EXTENSION}"\
+		    -F g="${GROUP_ID}"\
+		    -F a="${PROJECT_NAME}"\
+		    -F v="${VERSION}"\
+		    -F p=zip\
+		    -F file="@${ARTEFACT_PATH}"\
+		    -u "${NEXUS_USER}:${NEXUS_PASSWORD}"\
+		    "${NEXUS_URL}/nexus/service/local/artifact/maven/content"
+}
+
+
+if [ ! $# -eq 1 ]
+then
+	usage
+fi
+
+if [ $# -eq 1 ]
+then
+	case "$1" in
+	"-v"|"--version")
+		version
+		;;
+	*)
+		upload "$0"
+	esac
+fi
+
+
