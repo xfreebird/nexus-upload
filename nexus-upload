@@ -21,7 +21,7 @@ $0 /path/to/artefact.file
 }
 
 function upload() {
-	ARTEFACT_PATH=$(echo "$0")
+	ARTEFACT_PATH=$(echo "$1")
 	ARTEFACT_NAME=$(basename "${ARTEFACT_PATH}")
 	ARTEFACT_EXTENSION="${ARTEFACT_NAME##*.}"
 
@@ -50,7 +50,7 @@ then
 		version
 		;;
 	*)
-		upload "$0"
+		upload "$1"
 	esac
 fi
 
